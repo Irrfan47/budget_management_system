@@ -116,7 +116,29 @@ const updateProgram = async (req, res) => {
         if (budget !== undefined && budget !== '') program.budget = budget;
         if (recipientName !== undefined && recipientName !== '') program.recipientName = recipientName;
         if (referenceLetter !== undefined && referenceLetter !== '') program.referenceLetter = referenceLetter;
-        if (status !== undefined && status !== '') program.status = status;
+
+        // Handle status change and history
+        if (status !== undefined && status !== '') {
+            program.status = status;
+
+            // Add to history if status changed or message provided
+            if (req.body.message || program.isModified('status')) {
+                program.history.push({
+                    status: status,
+                    message: req.body.message || `Status updated to ${status}`,
+                    updatedBy: req.user._id,
+                    date: new Date()
+                });
+            }
+        } else if (req.body.message) {
+            // If only message is provided without status change (e.g. just a comment)
+            program.history.push({
+                status: program.status,
+                message: req.body.message,
+                updatedBy: req.user._id,
+                date: new Date()
+            });
+        }
 
         // Handle new document uploads
         if (req.files && req.files.length > 0) {

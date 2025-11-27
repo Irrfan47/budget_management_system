@@ -5,6 +5,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import ProfilePage from './components/profile/ProfilePage';
 import UserManagement from './components/users/UserManagement';
 import UserProgramView from './components/programs/user/UserProgramView';
+import QueryPage from './components/query/QueryPage';
 import UserListView from './components/programs/finance/UserListView';
 import UserProgramsView from './components/programs/finance/UserProgramsView';
 import StatusTracking from './components/status/StatusTracking';
@@ -38,6 +39,7 @@ function App() {
 
           {/* User role: direct access to their programs */}
           <Route path="/program" element={userRole === 'user' ? <UserProgramView /> : <Navigate to="/dashboard" />} />
+          <Route path="/query" element={userRole === 'user' ? <QueryPage /> : <Navigate to="/dashboard" />} />
 
           {/* Finance/Admin role: user list and user programs */}
           <Route path="/userlist" element={userRole === 'finance' || userRole === 'admin' ? <UserListView /> : <Navigate to="/dashboard" />} />

@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Briefcase, Activity, User, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Briefcase, Activity, User, ChevronLeft, ChevronRight, LogOut, MessageSquare } from 'lucide-react';
 import { authService } from '../../services/api';
 import logo from '../../assets/logo.jpg';
 
@@ -27,6 +27,7 @@ const Sidebar = ({ isCollapsed, onToggle, onLogout }: SidebarProps) => {
             subLabel: 'Budget Programs',
             path: isUser ? '/program' : '/userlist'
         },
+        ...(isUser ? [{ id: 'query', icon: MessageSquare, label: 'Query', subLabel: 'Manage Queries', path: '/query' }] : []),
         { id: 'status', icon: Activity, label: 'Status Tracking', subLabel: 'Allocation Progress', path: '/status' },
         { id: 'profile', icon: User, label: 'Profile', subLabel: 'Account Settings', path: '/profile' },
     ];

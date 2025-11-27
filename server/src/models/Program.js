@@ -32,9 +32,21 @@ const programSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Active', 'Pending', 'Critical', 'Draft', 'Under Review', 'Completed'],
+        enum: ['Active', 'Pending', 'Critical', 'Draft', 'Under Review', 'Completed', 'Query', 'Query Answered', 'Rejected'],
         default: 'Draft'
     },
+    history: [{
+        status: String,
+        message: String,
+        updatedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

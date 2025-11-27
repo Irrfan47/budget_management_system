@@ -6,11 +6,38 @@ A comprehensive web application for managing budgets, programs, and users. This 
 
 *   **Role-Based Access Control:** Secure login and dashboard views for different user roles (Admin, Finance, User).
 *   **Dashboard:** Visual overview of budget allocation and program status using interactive charts.
-*   **Program Management:** Create, update, and track financial programs.
+*   **Program Management:**
+    *   Create, update, and track financial programs.
+    *   **Status Workflow:** Programs move through various statuses: Draft -> Pending -> Under Review -> Active/Query/Rejected -> Completed.
+    *   **Query System:** Finance users can raise queries on programs. Users can reply to queries, and the entire conversation history is tracked.
+    *   **Accept/Reject Workflow:** Finance users can formally accept (mark as Completed) or reject programs with remarks/reasons.
 *   **Document Management:** Upload and manage documents associated with programs.
 *   **User Management:** Admin tools to add and manage system users.
 *   **Profile Management:** User profile updates including profile photo upload.
 *   **Responsive Design:** Built with Tailwind CSS for a seamless experience across devices.
+
+## Program Workflow
+
+The application follows a structured workflow for program management, ensuring clear communication between Users and Finance/Admin roles.
+
+1.  **Creation & Submission**
+    *   **User** creates a program -> Status: **Draft**
+    *   **User** submits the program -> Status: **Pending**
+
+2.  **Review Process**
+    *   **Finance/Admin** reviews the submitted program.
+    *   If details are correct -> Finance clicks **Accept** -> Status: **Completed**
+    *   If information is missing/incorrect -> Finance clicks **Query** -> Status: **Query**
+
+3.  **Query Resolution**
+    *   **User** sees the program in "Query Management".
+    *   **User** edits details (if needed) and clicks **Reply** -> Status: **Query Answered**
+    *   **Finance** reviews the reply.
+
+4.  **Final Decision**
+    *   If satisfied -> Finance clicks **Accept** -> Status: **Completed**
+    *   If still unsatisfied -> Finance clicks **Query** again -> Status: **Query**
+    *   If the request is invalid -> Finance clicks **Reject** -> Status: **Rejected**
 
 ## Tech Stack
 
@@ -97,6 +124,12 @@ budget-portal/
 ├── src/                # Frontend React application
 │   ├── assets/         # Images and styles
 │   ├── components/     # Reusable UI components
+│   │   ├── layout/     # Layout components (Sidebar, etc.)
+│   │   ├── programs/   # Program-related components
+│   │   │   ├── finance/# Finance-specific views
+│   │   │   └── user/   # User-specific views
+│   │   ├── query/      # Query management components
+│   │   └── ui/         # Generic UI components (Modals, etc.)
 │   ├── services/       # API service functions
 │   ├── utils/          # Utility functions
 │   ├── App.tsx         # Main application component

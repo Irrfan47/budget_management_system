@@ -1,4 +1,4 @@
-import { Edit2, Send, FileText, Info } from 'lucide-react';
+import { Edit2, Send, FileText, Info, MessageSquare, CheckCircle, History, XCircle } from 'lucide-react';
 import { authService } from '../../services/api';
 
 interface ProgramListProps {
@@ -8,9 +8,13 @@ interface ProgramListProps {
     onSubmit?: (program: any) => void;
     onViewDocuments?: (program: any) => void;
     onViewDetails?: (program: any) => void;
+    onQuery?: (program: any) => void;
+    onAccept?: (program: any) => void;
+    onReject?: (program: any) => void;
+    onViewHistory?: (program: any) => void;
 }
 
-const ProgramList = ({ programs, isLoading, onEdit, onSubmit, onViewDocuments, onViewDetails }: ProgramListProps) => {
+const ProgramList = ({ programs, isLoading, onEdit, onSubmit, onViewDocuments, onViewDetails, onQuery, onAccept, onReject, onViewHistory }: ProgramListProps) => {
     const currentUser = authService.getCurrentUser();
     const userRole = currentUser?.role;
 
@@ -29,7 +33,10 @@ const ProgramList = ({ programs, isLoading, onEdit, onSubmit, onViewDocuments, o
             case 'critical': return 'bg-red-100 text-red-700';
             case 'draft': return 'bg-slate-100 text-slate-700';
             case 'under review': return 'bg-blue-100 text-blue-700';
-            case 'completed': return 'bg-blue-100 text-blue-700';
+            case 'completed': return 'bg-green-100 text-green-700';
+            case 'rejected': return 'bg-red-100 text-red-700';
+            case 'query': return 'bg-amber-100 text-amber-700';
+            case 'query answered': return 'bg-purple-100 text-purple-700';
             default: return 'bg-slate-100 text-slate-700';
         }
     };
@@ -95,24 +102,111 @@ const ProgramList = ({ programs, isLoading, onEdit, onSubmit, onViewDocuments, o
                                         Documents
                                     </button>
 
-                                    {/* Edit and Submit - Only for user role with Draft status */}
-                                    {userRole === 'user' && program.status === 'Draft' && (
+                                    {/* Actions for non-terminal statuses */}
+                                    {!['Completed', 'Rejected'].includes(program.status) && (
                                         <>
-                                            <button
-                                                onClick={() => onEdit?.(program)}
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary hover:text-primary/80 hover:bg-primary/5 rounded-lg transition-colors cursor-pointer font-medium"
-                                            >
-                                                <Edit2 size={14} />
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => onSubmit?.(program)}
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors cursor-pointer font-medium"
-                                            >
-                                                <Send size={14} />
-                                                Submit
-                                            </button>
+                                            {/* Edit and Submit - Only for user role with Draft status */}
+                                            {userRole === 'user' && program.status === 'Draft' && (
+                                                <>
+                                                    <button
+                                                        onClick={() => onEdit?.(program)}
+                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary hover:text-primary/80 hover:bg-primary/5 rounded-lg transition-colors cursor-pointer font-medium"
+                                                    >
+                                                        <Edit2 size={14} />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => onSubmit?.(program)}
+                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors cursor-pointer font-medium"
+                                                    >
+                                                        <Send size={14} />
+                                                        Submit
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {/* Finance/Admin Actions */}
+                                            {(userRole === 'finance' || userRole === 'admin') && (
+                                                <>
+                                                    {/* Query Button */}
+                                                    {onQuery && (
+                                                        <button
+                                                            onClick={() => onQuery(program)}
+                                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors cursor-pointer font-medium ${program.status === 'Query'
+                                                                    ? 'text-purple-600 hover:text-purple-700 hover:bg-purple-50'
+                                                                    : 'text-amber-600 hover:text-amber-700 hover:bg-amber-50'
+                                                                }`}
+                                                            title={program.status === 'Query' ? "View Query" : "Raise Query"}
+                                                        >
+                                                            <MessageSquare size={14} />
+                                                            {program.status === 'Query' ? 'View Query' : 'Query'}
+                                                        </button>
+                                                    )}
+
+                                                    {/* Accept Button - Hide if in Query */}
+                                                    {onAccept && program.status !== 'Query' && (
+                                                        <button
+                                                            onClick={() => onAccept(program)}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors cursor-pointer font-medium"
+                                                            title="Accept Program"
+                                                        >
+                                                            <CheckCircle size={14} />
+                                                            Accept
+                                                        </button>
+                                                    )}
+
+                                                    {/* Reject Button - Only if Query Answered */}
+                                                    {onReject && program.status === 'Query Answered' && (
+                                                        <button
+                                                            onClick={() => onReject(program)}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer font-medium"
+                                                            title="Reject Program"
+                                                        >
+                                                            <XCircle size={14} />
+                                                            Reject
+                                                        </button>
+                                                    )}
+                                                </>
+                                            )}
+
+                                            {/* User Actions for Query */}
+                                            {userRole === 'user' && program.status === 'Query' && (
+                                                <>
+                                                    {onEdit && (
+                                                        <button
+                                                            onClick={() => onEdit(program)}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer font-medium"
+                                                            title="Edit Program Details"
+                                                        >
+                                                            <Edit2 size={14} />
+                                                            Edit
+                                                        </button>
+                                                    )}
+                                                    {onQuery && (
+                                                        <button
+                                                            onClick={() => onQuery(program)}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer font-medium"
+                                                            title="Reply to Query"
+                                                        >
+                                                            <MessageSquare size={14} />
+                                                            Reply
+                                                        </button>
+                                                    )}
+                                                </>
+                                            )}
                                         </>
+                                    )}
+
+                                    {/* View History Action - Always visible if provided */}
+                                    {onViewHistory && (
+                                        <button
+                                            onClick={() => onViewHistory(program)}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer font-medium"
+                                            title="View Query History"
+                                        >
+                                            <History size={14} />
+                                            History
+                                        </button>
                                     )}
                                 </div>
                             </td>

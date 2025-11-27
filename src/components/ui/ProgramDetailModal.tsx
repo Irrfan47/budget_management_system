@@ -162,6 +162,39 @@ const ProgramDetailModal = ({ isOpen, onClose, program }: ProgramDetailModalProp
                             </div>
                         )}
                     </div>
+
+                    {/* Query History Section */}
+                    {program.history && program.history.length > 0 && (
+                        <div className="mt-8 pt-6 border-t border-slate-200">
+                            <h4 className="text-lg font-semibold text-slate-900 mb-4">Query History</h4>
+                            <div className="space-y-4 bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                {[...program.history].sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((item: any, index: number) => (
+                                    <div key={index} className="flex gap-4">
+                                        <div className="flex-shrink-0 mt-1">
+                                            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 shadow-sm">
+                                                {index + 1}
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start mb-1">
+                                                <span className="text-sm font-medium text-slate-900">
+                                                    Status changed to <span className="text-primary">{item.status}</span>
+                                                </span>
+                                                <span className="text-xs text-slate-400">
+                                                    {new Date(item.date).toLocaleString()}
+                                                </span>
+                                            </div>
+                                            {item.message && (
+                                                <p className="text-sm text-slate-600 bg-white p-3 rounded-lg border border-slate-200 mt-2">
+                                                    {item.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer */}
