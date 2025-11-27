@@ -22,7 +22,7 @@ The application follows a structured workflow for program management, ensuring c
 
 1.  **Creation & Submission**
     *   **User** creates a program -> Status: **Draft**
-    *   **User** submits the program -> Status: **Pending**
+    *   **User** submits the program -> Status: **Under Review**
 
 2.  **Review Process**
     *   **Finance/Admin** reviews the submitted program.
