@@ -53,8 +53,12 @@ const UserProgramsView = ({ userId: propUserId, userName: propUserName, onBack }
             setIsLoading(true);
             try {
                 const data = await programService.getPrograms(userId);
-                setPrograms(data);
-                setFilteredPrograms(data);
+                // Sort by createdAt descending (newest first)
+                const sortedData = data.sort((a: any, b: any) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
+                setPrograms(sortedData);
+                setFilteredPrograms(sortedData);
             } catch (error) {
                 console.error('Failed to fetch programs:', error);
             } finally {

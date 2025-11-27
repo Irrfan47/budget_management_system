@@ -166,7 +166,7 @@ const ProgramDetailModal = ({ isOpen, onClose, program }: ProgramDetailModalProp
                     {/* Query History Section */}
                     {program.history && program.history.length > 0 && (
                         <div className="mt-8 pt-6 border-t border-slate-200">
-                            <h4 className="text-lg font-semibold text-slate-900 mb-4">Query History</h4>
+                            <h4 className="text-lg font-semibold text-slate-900 mb-4">History</h4>
                             <div className="space-y-4 bg-slate-50 rounded-xl p-4 border border-slate-100">
                                 {[...program.history].sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((item: any, index: number) => (
                                     <div key={index} className="flex gap-4">

@@ -1,7 +1,7 @@
 import { MoreHorizontal, Clock } from 'lucide-react';
 
 interface StatusItem {
-    id: number;
+    id: string | number;
     title: string;
     department: string;
     date: string;
@@ -44,10 +44,6 @@ const StatusColumn = ({ title, count, color, items }: StatusColumnProps) => {
                         </div>
                     </div>
                 ))}
-
-                <button className="w-full py-2 border border-dashed border-slate-300 rounded-lg text-slate-500 text-sm hover:bg-slate-100 hover:border-slate-400 transition-all flex items-center justify-center gap-2">
-                    + Add New
-                </button>
             </div>
         </div>
     );

@@ -1,18 +1,16 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const data = [
-    { name: 'Jan', value: 450000 },
-    { name: 'Feb', value: 520000 },
-    { name: 'Mar', value: 480000 },
-    { name: 'Apr', value: 610000 },
-    { name: 'May', value: 590000 },
-    { name: 'Jun', value: 680000 },
-];
+interface SpendingTrendChartProps {
+    data: {
+        name: string;
+        value: number;
+    }[];
+}
 
-const SpendingTrendChart = () => {
+const SpendingTrendChart = ({ data }: SpendingTrendChartProps) => {
     return (
         <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm h-[400px] flex flex-col">
-            <h3 className="text-lg font-bold text-slate-900 mb-6">Monthly Spending Trend</h3>
+            <h3 className="text-lg font-bold text-slate-900 mb-6">Monthly Budget Trend</h3>
             <div className="flex-1 w-full min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart
@@ -40,7 +38,7 @@ const SpendingTrendChart = () => {
                         />
                         <Tooltip
                             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                            formatter={(value: number) => [`$${value.toLocaleString()}`, 'Spending']}
+                            formatter={(value: number) => [`RM ${value.toLocaleString()}`, 'Budget']}
                         />
                         <Line
                             type="monotone"

@@ -227,13 +227,36 @@ const deleteDocument = async (req, res) => {
 // @route   DELETE /api/programs/:id
 // @access  Private (Admin only?)
 const deleteProgram = async (req, res) => {
-    const program = await Program.findById(req.params.id);
+    try {
+        const program = await Program.findById(req.params.id);
 
-    if (program) {
+        if (!program) {
+            return res.status(404).json({ message: 'Program not found' });
+        }
+
+        // Check permissions
+        if (req.user.role === 'user') {
+            // User must own the program
+            if (program.createdBy.toString() !== req.user._id.toString()) {
+                return res.status(403).json({ message: 'Not authorized to delete this program' });
+            }
+            // Program must be in Draft status
+            if (program.status !== 'Draft') {
+                return res.status(400).json({ message: 'Can only delete programs in Draft status' });
+            }
+        }
+
+        // Delete associated files and directory
+        const programDir = path.join(__dirname, `../../uploads/documents/${program._id}`);
+        if (fs.existsSync(programDir)) {
+            fs.rmSync(programDir, { recursive: true, force: true });
+        }
+
         await program.deleteOne();
         res.json({ message: 'Program removed' });
-    } else {
-        res.status(404).json({ message: 'Program not found' });
+    } catch (error) {
+        console.error('Error deleting program:', error);
+        res.status(500).json({ message: 'Failed to delete program', error: error.message });
     }
 };
 

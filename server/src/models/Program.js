@@ -26,10 +26,7 @@ const programSchema = new mongoose.Schema({
             default: Date.now
         }
     }],
-    spent: {
-        type: Number,
-        default: 0
-    },
+
     status: {
         type: String,
         enum: ['Active', 'Pending', 'Critical', 'Draft', 'Under Review', 'Completed', 'Query', 'Query Answered', 'Rejected'],

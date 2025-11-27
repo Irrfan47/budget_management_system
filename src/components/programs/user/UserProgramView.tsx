@@ -6,6 +6,7 @@ import EditProgramModal from '../../ui/EditProgramModal';
 import SubmitProgramModal from '../../ui/SubmitProgramModal';
 import DocumentViewModal from '../../ui/DocumentViewModal';
 import ProgramDetailModal from '../../ui/ProgramDetailModal';
+import DeleteProgramModal from '../../ui/DeleteProgramModal';
 import { programService } from '../../../services/api';
 
 const UserProgramView = () => {
@@ -16,6 +17,8 @@ const UserProgramView = () => {
     const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
     const [isDocumentViewOpen, setIsDocumentViewOpen] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [selectedProgram, setSelectedProgram] = useState<any>(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -23,7 +26,11 @@ const UserProgramView = () => {
         const fetchPrograms = async () => {
             try {
                 const data = await programService.getPrograms();
-                setPrograms(data);
+                // Sort by createdAt descending (newest first)
+                const sortedData = data.sort((a: any, b: any) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
+                setPrograms(sortedData);
             } catch (error) {
                 console.error('Failed to fetch programs:', error);
             } finally {
@@ -59,6 +66,22 @@ const UserProgramView = () => {
         }
     };
 
+    const handleDeleteProgram = async () => {
+        if (!selectedProgram) return;
+
+        try {
+            setIsDeleting(true);
+            await programService.deleteProgram(selectedProgram._id);
+            setRefreshTrigger(prev => prev + 1);
+            setIsDeleteModalOpen(false);
+            setSelectedProgram(null);
+        } catch (error) {
+            console.error('Failed to delete program:', error);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     const handleOpenEditModal = (program: any) => {
         setSelectedProgram(program);
         setIsEditModalOpen(true);
@@ -77,6 +100,11 @@ const UserProgramView = () => {
     const handleOpenDetailModal = (program: any) => {
         setSelectedProgram(program);
         setIsDetailModalOpen(true);
+    };
+
+    const handleOpenDeleteModal = (program: any) => {
+        setSelectedProgram(program);
+        setIsDeleteModalOpen(true);
     };
 
     const handleSubmitProgram = async () => {
@@ -119,6 +147,7 @@ const UserProgramView = () => {
                     isLoading={isLoading}
                     onEdit={handleOpenEditModal}
                     onSubmit={handleOpenSubmitModal}
+                    onDelete={handleOpenDeleteModal}
                     onViewDocuments={handleOpenDocumentView}
                     onViewDetails={handleOpenDetailModal}
                 />
@@ -167,6 +196,17 @@ const UserProgramView = () => {
                     setSelectedProgram(null);
                 }}
                 program={selectedProgram}
+            />
+
+            <DeleteProgramModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setSelectedProgram(null);
+                }}
+                onConfirm={handleDeleteProgram}
+                programName={selectedProgram?.name || ''}
+                isDeleting={isDeleting}
             />
         </div>
     );

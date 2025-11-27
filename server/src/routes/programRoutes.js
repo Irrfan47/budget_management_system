@@ -82,7 +82,7 @@ router.route('/')
 router.route('/:id')
     .get(protect, getProgramById)
     .put(protect, upload.array('documents', 10), updateProgram)
-    .delete(protect, authorize('admin'), deleteProgram);
+    .delete(protect, deleteProgram);
 
 router.route('/:id/documents/:documentId')
     .delete(protect, deleteDocument);

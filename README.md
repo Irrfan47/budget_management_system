@@ -9,6 +9,8 @@ A comprehensive web application for managing budgets, programs, and users. This 
 *   **Program Management:**
     *   Create, update, and track financial programs.
     *   **Status Workflow:** Programs move through various statuses: Draft -> Pending -> Under Review -> Active/Query/Rejected -> Completed.
+    *   **Status Tracking:** Kanban-style board to monitor programs by status (Pending, Accepted, Rejected) with month navigation.
+    *   **Program Deletion:** Users can securely delete their own programs while in 'Draft' status.
     *   **Query System:** Finance users can raise queries on programs. Users can reply to queries, and the entire conversation history is tracked.
     *   **Accept/Reject Workflow:** Finance users can formally accept (mark as Completed) or reject programs with remarks/reasons.
 *   **Document Management:** Upload and manage documents associated with programs.
@@ -124,12 +126,17 @@ budget-portal/
 ├── src/                # Frontend React application
 │   ├── assets/         # Images and styles
 │   ├── components/     # Reusable UI components
+│   │   ├── auth/       # Authentication components
+│   │   ├── dashboard/  # Dashboard widgets and charts
 │   │   ├── layout/     # Layout components (Sidebar, etc.)
-│   │   ├── programs/   # Program-related components
+│   │   ├── profile/    # User profile management
+│   │   ├── programs/   # Program management
 │   │   │   ├── finance/# Finance-specific views
 │   │   │   └── user/   # User-specific views
-│   │   ├── query/      # Query management components
-│   │   └── ui/         # Generic UI components (Modals, etc.)
+│   │   ├── query/      # Query management
+│   │   ├── status/     # Status tracking board
+│   │   ├── ui/         # Generic UI components (Modals, etc.)
+│   │   └── users/      # User management (Admin)
 │   ├── services/       # API service functions
 │   ├── utils/          # Utility functions
 │   ├── App.tsx         # Main application component
