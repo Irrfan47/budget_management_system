@@ -1,73 +1,111 @@
-# React + TypeScript + Vite
+# Budget Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive web application for managing budgets, programs, and users. This portal facilitates the tracking of financial programs, document management, and user administration with role-based access control.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Role-Based Access Control:** Secure login and dashboard views for different user roles (Admin, Finance, User/Exco).
+*   **Dashboard:** Visual overview of budget allocation and program status using interactive charts.
+*   **Program Management:** Create, update, and track financial programs.
+*   **Document Management:** Upload and manage documents associated with programs.
+*   **User Management:** Admin tools to add and manage system users.
+*   **Profile Management:** User profile updates including profile photo upload.
+*   **Responsive Design:** Built with Tailwind CSS for a seamless experience across devices.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+*   **React** (Vite)
+*   **TypeScript**
+*   **Tailwind CSS**
+*   **Recharts** (Data Visualization)
+*   **Lucide React** (Icons)
+*   **React Router DOM** (Routing)
+*   **Axios** (API Requests)
 
-## Expanding the ESLint configuration
+### Backend
+*   **Node.js**
+*   **Express.js**
+*   **MongoDB** (Mongoose ODM)
+*   **JWT** (Authentication)
+*   **Multer** (File Uploads)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Before you begin, ensure you have the following installed:
+*   [Node.js](https://nodejs.org/) (v14 or higher)
+*   [MongoDB](https://www.mongodb.com/) (Local or Atlas)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Installation & Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd budget-portal
+    ```
+
+2.  **Install Frontend Dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Install Backend Dependencies:**
+    ```bash
+    cd server
+    npm install
+    cd ..
+    ```
+
+4.  **Environment Configuration:**
+    Create a `.env` file in the `server` directory with the following variables:
+    ```env
+    PORT=5000
+    MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret_key
+    ```
+
+5.  **Run the Application:**
+
+    *   **Start the Backend Server:**
+        Open a terminal and run:
+        ```bash
+        cd server
+        npm run dev
+        ```
+        The server will start on `http://localhost:5000`.
+
+    *   **Start the Frontend Development Server:**
+        Open a new terminal window and run:
+        ```bash
+        npm run dev
+        ```
+        The application will be available at `http://localhost:5173` (or the port shown in the terminal).
+
+## Project Structure
+
+```
+budget-portal/
+├── dist/               # Production build output
+├── public/             # Static assets
+├── server/             # Backend Node.js/Express application
+│   ├── config/         # Database configuration
+│   ├── controllers/    # Route controllers
+│   ├── middleware/     # Custom middleware (auth, upload)
+│   ├── models/         # Mongoose models
+│   ├── routes/         # API routes
+│   └── uploads/        # Uploaded documents storage
+├── src/                # Frontend React application
+│   ├── assets/         # Images and styles
+│   ├── components/     # Reusable UI components
+│   ├── services/       # API service functions
+│   ├── utils/          # Utility functions
+│   ├── App.tsx         # Main application component
+│   └── main.tsx        # Entry point
+├── index.html          # HTML template
+├── package.json        # Frontend dependencies and scripts
+└── vite.config.ts      # Vite configuration
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This project is licensed under the ISC License.
