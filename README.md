@@ -1,10 +1,10 @@
-# Budget Portal
+# Budget Portal with MERN Stack
 
 A comprehensive web application for managing budgets, programs, and users. This portal facilitates the tracking of financial programs, document management, and user administration with role-based access control.
 
 ## Features
 
-*   **Role-Based Access Control:** Secure login and dashboard views for different user roles (Admin, Finance, User/Exco).
+*   **Role-Based Access Control:** Secure login and dashboard views for different user roles (Admin, Finance, User).
 *   **Dashboard:** Visual overview of budget allocation and program status using interactive charts.
 *   **Program Management:** Create, update, and track financial programs.
 *   **Document Management:** Upload and manage documents associated with programs.
