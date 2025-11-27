@@ -8,7 +8,7 @@ A comprehensive web application for managing budgets, programs, and users. This 
 *   **Dashboard:** Visual overview of budget allocation and program status using interactive charts.
 *   **Program Management:**
     *   Create, update, and track financial programs.
-    *   **Status Workflow:** Programs move through various statuses: Draft -> Pending -> Under Review -> Active/Query/Rejected -> Completed.
+    *   **Status Workflow:** Programs move through various statuses: Draft -> Under Review -> Query/Query Answered -> Completed/Rejected.
     *   **Status Tracking:** Kanban-style board to monitor programs by status (Pending, Accepted, Rejected) with month navigation.
     *   **Program Deletion:** Users can securely delete their own programs while in 'Draft' status.
     *   **Query System:** Finance users can raise queries on programs. Users can reply to queries, and the entire conversation history is tracked.
@@ -55,6 +55,7 @@ The application follows a structured workflow for program management, ensuring c
 ### Backend
 *   **Node.js**
 *   **Express.js**
+*   **RESTful API** Architecture
 *   **MongoDB** (Mongoose ODM)
 *   **JWT** (Authentication)
 *   **Multer** (File Uploads)
